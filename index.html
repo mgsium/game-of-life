@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- REACTJS -->
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+        <!--  font-awesome, stylesheet -->
+        <link rel="stylesheet" href="./stylesheet.css">
+        <!-- BOOTSTRAP-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!-- BOOTSTRAP CSS-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- FONT -->
+        <link href="https://fonts.googleapis.com/css?family=Manjari&display=swap" rel="stylesheet">
+        <!-- DRAGSCROLL -->
+        <script src="./assets/dragscroll-master/dragscroll.js"></script>
+        <!-- LOGIC -->
+        <script src="./simulation.js"></script>
+        <script type="text/babel">
+            function GridRow(props){
+                let blocks = [];
+                for (let i = 0; i < 100; i++){
+                    blocks.push(<td id={props.id + "-" + i}></td>)
+                }
+                return (
+                    <tr id={props.id}>
+                        {blocks}
+                    </tr>
+                )
+            }
+
+            class GameGrid extends React.Component{
+                constructor(props){
+                    super(props)
+                }
+                render(){
+                    let grid = [];
+                    for (let i = 100; i > 0; i--){
+                        grid.push(<GridRow id={i}/>);
+                    }
+                    return (
+                        <table>
+                            <tbody>
+                                {grid}
+                            </tbody>
+                        </table>
+                    )
+                }
+            }
+
+            ReactDOM.render(
+                <GameGrid/>,
+                document.getElementById("root")
+            )
+
+            $("td").on("click", function(){ 
+                $(this).toggleClass("house");
+                Game.houses.includes(this.id) ? Game.removeHouse(this.id) : Game.addHouse(this.id);
+                console.log(Game.houses); // REMOVE THIS
+            })
+
+            function clearHouses(){
+                $(".house").each(function(){
+                    $(this).removeClass("house");
+                })
+                Game.houses = [];
+            }
+        </script>
+    </head>
+    <body style="font-family: 'Manjari', sans-serif">
+        <nav id="main-navbar-top" class="navbar navbar-dark bg-primary shadow-sm">
+            <a class="navbar-brand mx-auto" href="#" style="font-family: 'Manjari', sans-serif">Conway's Game of Life</a>
+        </nav>
+        <nav id="main-navbar-bottom" class="navbar navbar-dark bg-primary shadow-sm">
+            <button id="clear-btn" type="button" class="btn btn-danger btn-sm" onclick="clearHouses()">Clear</button>
+            <button id="start-vis-btn" type="button" class="btn btn-primary btn-sm mx-auto" onclick="Simulate();">Start Visulisation</button>
+        </nav>
+        <div id="root" class="dragscroll"></div>
+    </body>
+</html>

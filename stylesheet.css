@@ -1,0 +1,78 @@
+html, body {
+    font-family: 'Manjari', sans-serif;
+    height: 100%;
+    overflow: hidden;
+}
+
+#start-vis-btn, #clear-btn {
+    border: 1px solid whitesmoke;
+    border-bottom: 3px solid whitesmoke;
+}
+
+#clear-btn:hover {
+    background-color: whitesmoke;
+    color: rgb(245, 0, 0);
+    border-bottom: 3px solid rgb(245, 0, 0);
+}
+
+#start-vis-btn:hover {
+    background-color: whitesmoke;
+    color: blue;
+    border-bottom: 3px solid rgb(0, 0, 245);
+}
+
+#start-vis-btn:active, #clear-btn:active {
+    border-bottom: 1px solid whitesmoke;
+}
+
+#main-navbar-top, #main-navbar-bottom{
+    /*border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;*/
+    width: 100%;
+    z-index: 9999;
+    position: fixed;
+}
+
+#main-navbar-bottom{
+    border-top: 1px solid white;
+    border-bottom: 3px solid rgba(208, 208, 248, 0.523);
+    margin-top: 55px;
+    min-height: 55px;
+}
+
+#root{
+    position: relative;
+    top: 59px;
+}
+
+table {
+    overflow-x: auto;
+}
+
+td{
+    min-width: 25px;
+    height: 25px;
+    border: 1px solid whitesmoke;
+    transition: all 0.5s ease-out;
+}
+
+td:hover{
+    cursor: pointer;
+}
+
+.dragscroll {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    cursor : -webkit-grab;
+    cursor : -moz-grab;
+    cursor : -o-grab;
+    cursor : grab;
+    color: #fff;
+}
+
+.house {
+    background-color: blue;
+    
+}
