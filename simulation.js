@@ -1,3 +1,6 @@
+// set initial house color
+window.houseChoice = "house-red";
+
 class Visualtisation{
     constructor(){
         this.houses = []
@@ -33,24 +36,29 @@ let checkNeighbours = async (placesToCheck) => {
 
         let id = `${y}-${x}`;
 
-        if($(`#${id}`).hasClass("house")){
+        if($(`#${id}`).hasClass(window.houseChoice)){
              if(neighbours == 3 || neighbours == 2) newHouseList.push(id);
          } else {
             if(neighbours == 3) newHouseList.push(id);
          }  
     }
-    Game.houses.forEach((elem) => {$(`#${elem}`).removeClass("house")});
+    Game.houses.forEach((elem) => {$(`#${elem}`).removeClass(window.houseChoice)});
     
     Game.houses = newHouseList;
 
-    Game.houses.forEach((elem) => {$(`#${elem}`).addClass("house")});
+    Game.houses.forEach((elem) => {$(`#${elem}`).addClass(window.houseChoice)});
     console.log(Game.houses);
 }
 
 
  async function Simulate(){
-    
-    while (Game.houses.length > 0){
+    window.isSimulating = true;
+    // disable start button
+    $("#start-vis-btn").attr("disabled", true);
+    // enable stop button
+    $("#stop-vis-btn").attr("disabled", false);
+
+    while (Game.houses.length > 0 && window.isSimulating){
         const len = Game.houses.length;
 
         // if there are no houses
@@ -109,4 +117,25 @@ let checkNeighbours = async (placesToCheck) => {
 
         console.log("Houses: "+ Game.houses);
     }
+}
+
+function stopSimulation(){
+    window.isSimulating = false;
+    // enable start button
+    $("#start-vis-btn").attr("disabled", false);
+    // disable stop button
+    $("#stop-vis-btn").attr("disabled", true);
+}
+
+// colour panel click handlers
+
+function houseBlue(){ window.houseChoice = "house-blue"; clearHouseColours();}
+function houseRed(){ window.houseChoice = "house-red"; clearHouseColours();}
+function houseGreen(){ window.houseChoice = "house-green"; clearHouseColours();}
+
+function clearHouseColours() {
+    Game.houses.forEach((elem) => {
+        $(`#${elem}`).removeClass();
+        $(`#${elem}`).addClass(window.houseChoice);
+    })
 }

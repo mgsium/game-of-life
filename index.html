@@ -58,27 +58,51 @@
                 document.getElementById("root")
             )
 
-            $("td").on("click", function(){ 
-                $(this).toggleClass("house");
+            $("td").on("click", function(){
+                // console.log(window.houseChoice); 
+                $(this).toggleClass(window.houseChoice);
                 Game.houses.includes(this.id) ? Game.removeHouse(this.id) : Game.addHouse(this.id);
                 console.log(Game.houses); // REMOVE THIS
             })
 
             function clearHouses(){
-                $(".house").each(function(){
-                    $(this).removeClass("house");
-                })
+                $("td").each(function(){ $(this).removeClass();});
                 Game.houses = [];
+                stopSimulation();
             }
+
+            // change breadcrumb separator
+            // $breadcrumb-divider: quote(" | ");
         </script>
     </head>
     <body style="font-family: 'Manjari', sans-serif">
         <nav id="main-navbar-top" class="navbar navbar-dark bg-primary shadow-sm">
-            <a class="navbar-brand mx-auto" href="#" style="font-family: 'Manjari', sans-serif">Conway's Game of Life</a>
+            <a class="navbar-brand" href="#" style="font-family: 'Manjari', sans-serif">Conway's Game of Life</a>
+            <div style="float: right">
+                <button type="button" class="btn btn-secondary btn-sm">Export</button>
+                <button type="button" class="btn btn-secondary btn-sm">Import</button>
+            </div>
         </nav>
-        <nav id="main-navbar-bottom" class="navbar navbar-dark bg-primary shadow-sm">
+        <nav id="main-navbar-bottom" class="navbar navbar-dark bg-light shadow-sm">
             <button id="clear-btn" type="button" class="btn btn-danger btn-sm" onclick="clearHouses()">Clear</button>
-            <button id="start-vis-btn" type="button" class="btn btn-primary btn-sm mx-auto" onclick="Simulate();">Start Visulisation</button>
+            <div class="mx-auto" style="position: relative; left: 5%">
+                <button id="start-vis-btn" type="button" class="btn btn-primary btn-sm" onclick="Simulate();">Start Visulisation</button>
+                <button id="stop-vis-btn" type="button" class="btn btn-warning btn-sm" onclick="stopSimulation();" disabled>Stop</button>
+            </div>
+            <div id="colour-control" class="btn-group btn-group-toggle radio-btn" style="float: right">
+                <label class="btn">
+                    <input type="radio" name="colour" autocomplete="off" disabled><small>House Colour</small>
+                </label>
+                <label class="btn btn-md btn-primary">
+                    <input type="radio" name="colour" id="blue" autocomplete="on" onchange="houseBlue();">Blue
+                </label>
+                <label class="btn btn-md btn-danger">
+                    <input type="radio" name="colour" id="red" autocomplete="off" onchange="houseRed();">Red
+                </label>
+                <label class="btn btn-md btn-success">
+                    <input type="radio" name="colour" id="green" autocomplete="off" onchange="houseGreen();">Green
+                </label>
+            </div>
         </nav>
         <div id="root" class="dragscroll"></div>
     </body>

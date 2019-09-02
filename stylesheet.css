@@ -4,7 +4,7 @@ html, body {
     overflow: hidden;
 }
 
-#start-vis-btn, #clear-btn {
+#start-vis-btn, #clear-btn, #stop-vis-btn, #export-btn{
     border: 1px solid whitesmoke;
     border-bottom: 3px solid whitesmoke;
 }
@@ -21,7 +21,25 @@ html, body {
     border-bottom: 3px solid rgb(0, 0, 245);
 }
 
-#start-vis-btn:active, #clear-btn:active {
+#stop-vis-btn:hover{
+    background-color: whitesmoke;
+    color: orange;
+    border-bottom: 3px solid rgb(255, 165, 0);
+}
+
+#export-btn:hover{
+    background-color: whitesmoke;
+    color: rgb(91, 192, 222);
+    border-bottom: 3px solid rgb(91, 192, 222);
+}
+
+.btn-secondary:hover {
+    background-color: whitesmoke;
+    color: grey;
+    border-bottom: 3px solid grey;
+}
+
+#start-vis-btn:active, #clear-btn:active, #stop-vis-btn:active, #export-btn:active, .btn-secondary:active {
     border-bottom: 1px solid whitesmoke;
 }
 
@@ -72,7 +90,15 @@ td:hover{
     color: #fff;
 }
 
-.house {
-    background-color: blue;
-    
+
+.btn-sm {
+    height: 60%;
 }
+
+/* House classes */
+
+.house-blue { background-color: blue; }
+
+.house-red { background-color: red; }
+
+.house-green { background: green; }
