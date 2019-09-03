@@ -19,6 +19,7 @@
         <link href="https://fonts.googleapis.com/css?family=Manjari&display=swap" rel="stylesheet">
         <!-- DRAGSCROLL -->
         <script src="./assets/dragscroll-master/dragscroll.js"></script>
+        <script src="./assets/file-saver/src/FileSaver.js"></script>
         <!-- LOGIC -->
         <script src="./simulation.js"></script>
         <script type="text/babel">
@@ -79,8 +80,9 @@
         <nav id="main-navbar-top" class="navbar navbar-dark bg-primary shadow-sm">
             <a class="navbar-brand" href="#" style="font-family: 'Manjari', sans-serif">Conway's Game of Life</a>
             <div style="float: right">
-                <button type="button" class="btn btn-secondary btn-sm">Export</button>
-                <button type="button" class="btn btn-secondary btn-sm">Import</button>
+                <a href="#" onclick="exportJSON();" class="btn btn-secondary btn-sm">Export</a>
+                <a href="#" class="btn btn-secondary btn-sm" onclick="$('#file-upload-btn').click()">Import</a>
+                <input id="file-upload-btn" type="file" style="display: none">
             </div>
         </nav>
         <nav id="main-navbar-bottom" class="navbar navbar-dark bg-light shadow-sm">

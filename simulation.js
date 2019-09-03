@@ -17,6 +17,7 @@ let checkNeighbours = async (placesToCheck) => {
     let newHouseList = [];
 
     for (let i = 0; i < len; i++){
+        // Game.updateJSON();
 
         let neighbours = 0;
         const y = placesToCheck[i].split("-")[0];
@@ -138,4 +139,14 @@ function clearHouseColours() {
         $(`#${elem}`).removeClass();
         $(`#${elem}`).addClass(window.houseChoice);
     })
+}
+
+function exportJSON(){
+    var fileToSave = new Blob(
+        [JSON.stringify({ housePositions: Game.houses})],{
+        type: "application/json",
+        name: "housePosition.json"
+        })
+
+    saveAs(fileToSave, "housePosition.json")
 }
