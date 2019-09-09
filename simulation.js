@@ -150,3 +150,18 @@ function exportJSON(){
 
     saveAs(fileToSave, "housePosition.json")
 }
+
+async function importJSON(files){
+    const file = files.item(0);
+    if (file.type == "application/json"){
+        let fileText = await file.text();
+        // console.log(fileText);
+        fileObj = JSON.parse(fileText);
+        // console.log(fileObj.housePositions);
+        fileObj.housePositions.forEach(function(house){
+            $(`#${house}`).click();
+        })
+    } else {
+        alert("\nYou chose an invalid file type.\nPlease upload a json file.")
+    }
+}

@@ -71,7 +71,7 @@ td{
     min-width: 25px;
     height: 25px;
     border: 1px solid whitesmoke;
-    transition: all 0.5s ease-out;
+    transition: all 0.35s ease-out;
 }
 
 td:hover{

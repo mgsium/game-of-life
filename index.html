@@ -82,13 +82,13 @@
             <div style="float: right">
                 <a href="#" onclick="exportJSON();" class="btn btn-secondary btn-sm">Export</a>
                 <a href="#" class="btn btn-secondary btn-sm" onclick="$('#file-upload-btn').click()">Import</a>
-                <input id="file-upload-btn" type="file" style="display: none">
+                <input id="file-upload-btn" type="file" style="display: none" onchange="importJSON(this.files)">
             </div>
         </nav>
         <nav id="main-navbar-bottom" class="navbar navbar-dark bg-light shadow-sm">
             <button id="clear-btn" type="button" class="btn btn-danger btn-sm" onclick="clearHouses()">Clear</button>
             <div class="mx-auto" style="position: relative; left: 5%">
-                <button id="start-vis-btn" type="button" class="btn btn-primary btn-sm" onclick="Simulate();">Start Visulisation</button>
+                <button id="start-vis-btn" type="button" class="btn btn-primary btn-sm" onclick="Simulate();">Start Visualisation</button>
                 <button id="stop-vis-btn" type="button" class="btn btn-warning btn-sm" onclick="stopSimulation();" disabled>Stop</button>
             </div>
             <div id="colour-control" class="btn-group btn-group-toggle radio-btn" style="float: right">
