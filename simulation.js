@@ -114,7 +114,7 @@ let checkNeighbours = async (placesToCheck) => {
 
         checkNeighbours(placesToCheck);
 
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 10000/document.visSpeed));
 
         console.log("Houses: "+ Game.houses);
     }
@@ -163,5 +163,17 @@ async function importJSON(files){
         })
     } else {
         alert("\nYou chose an invalid file type.\nPlease upload a json file.")
+    }
+}
+
+async function loadTemplate(event){
+    clearHouseColours();
+    switch(event.target.id){
+        case "glider-gun":
+            let housePositions = ["69-6","68-6","68-7","69-7","69-16","68-16","67-16","70-17","71-18","71-19","66-17","65-18","65-19","68-20","70-21","69-22","68-22","67-22","66-21","68-23","69-26","69-27","70-27","70-26","71-26","71-27","72-28","68-28","72-30","73-30","68-30","67-30","71-40","71-41","70-41","70-40"];
+            housePositions.forEach(function(house){
+                $(`#${house}`).click();
+            })
+            break;
     }
 }
