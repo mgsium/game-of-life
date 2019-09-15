@@ -23,9 +23,15 @@
         <!-- SLIDERS-->
         <link rel="stylesheet" href="./assets/sliders/sliders.css">
         <!-- LOGIC -->
-        <script src="./simulation.js"></script>
+        <script src="./assets/Visualisationjs/Visualisation.min.js"></script>
         <script type="text/babel">
-            document.visSpeed = 20; // sets initial speed for the visualisation
+            // creates an instace of the Visualisation class
+            let Game = new Visualisation();
+
+            // colour panel click handlers
+            function houseBlue(){ Game.houseChoice = "house-blue"; Game.clearHouseColours();}
+            function houseRed(){ Game.houseChoice = "house-red"; Game.clearHouseColours();}
+            function houseGreen(){ Game.houseChoice = "house-green"; Game.clearHouseColours();}
 
             function GridRow(props){
                 let blocks = [];
@@ -97,7 +103,11 @@
                                             Templates
                                         </button>
                                         <div className="dropdown-menu">
-                                            <a className="dropdown-item" id="glider-gun" href="#" onClick={loadTemplate}>Glider Gun</a>
+                                            <a className="dropdown-item" id="glider-gun" href="#" onClick={Game.loadTemplate}>Glider Gun</a>
+                                            <a className="dropdown-item" id="bi-gun" href="#" onClick={Game.loadTemplate}>Bi Gun</a>
+                                            <a className="dropdown-item" id="ak-94" href="#" onClick={Game.loadTemplate}>AK-94</a>
+                                            <a className="dropdown-item" id="simkin-glider-gun" href="#" onClick={Game.loadTemplate}>Simkin Glider Gun</a>
+                                            <a className="dropdown-item" id="pipe-dreams" href="#" onClick={Game.loadTemplate}>Piping</a>
                                         </div>
                                     </div>
                                 </div>
@@ -113,17 +123,11 @@
             )
 
             $("td").on("click", function(){
-                // console.log(window.houseChoice); 
-                $(this).toggleClass(window.houseChoice);
+                // console.log(Game.houseChoice); 
+                $(this).toggleClass(Game.houseChoice);
                 Game.houses.includes(this.id) ? Game.removeHouse(this.id) : Game.addHouse(this.id);
                 console.log(Game.houses); // REMOVE THIS
             })
-
-            function clearHouses(){
-                $("td").each(function(){ $(this).removeClass();});
-                Game.houses = [];
-                stopSimulation();
-            }
 
             // change breadcrumb separator
             // $breadcrumb-divider: quote(" | ");
@@ -133,17 +137,17 @@
         <nav id="main-navbar-top" class="navbar navbar-dark bg-primary shadow-sm">
             <a class="navbar-brand" href="#" style="font-family: 'Manjari', sans-serif">Conway's Game of Life</a>
             <div style="float: right">
-                <a href="#" onclick="exportJSON();" class="btn btn-secondary btn-sm">Export</a>
+                <a href="#" onclick="Game.exportJSON();" class="btn btn-secondary btn-sm">Export</a>
                 <a href="#" class="btn btn-secondary btn-sm" onclick="$('#file-upload-btn').click()">Import</a>
-                <input id="file-upload-btn" type="file" style="display: none" onchange="importJSON(this.files)">
+                <input id="file-upload-btn" type="file" style="display: none" onchange="Game.importJSON(this.files)">
             </div>
         </nav>
         <nav id="main-navbar-bottom" class="navbar navbar-dark bg-light shadow-sm">
-            <button id="clear-btn" type="button" class="btn btn-danger btn-sm" onclick="clearHouses()">Clear</button>
+            <button id="clear-btn" type="button" class="btn btn-danger btn-sm" onclick="Game.clearHouses();">Clear</button>
             
             <div class="mx-auto" style="position: relative; left: 5%">
-                <button id="start-vis-btn" type="button" class="btn btn-primary btn-sm" onclick="Simulate();">Start Visualisation</button>
-                <button id="stop-vis-btn" type="button" class="btn btn-warning btn-sm" onclick="stopSimulation();" disabled>Stop</button>
+                <button id="start-vis-btn" type="button" class="btn btn-primary btn-sm" onclick="Game.Simulate();">Start Visualisation</button>
+                <button id="stop-vis-btn" type="button" class="btn btn-warning btn-sm" onclick="Game.stopSimulation();" disabled>Stop</button>
             </div>
             <div id="colour-control" class="btn-group btn-group-toggle radio-btn" style="float: right">
                 <label class="btn">
