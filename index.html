@@ -55,7 +55,7 @@
                 async getSliderVal(){
                     const slider = document.getElementById("sizeRange");
                     // this.setState({"gridSize": parseInt(slider.value)})
-                    document.visSpeed = parseInt(slider.value);
+                    Game.visSpeed = parseInt(slider.value);
                 }
                 changeBlockSize(event){
                     let sizeStr = event.target.id.substring(0, 2);
