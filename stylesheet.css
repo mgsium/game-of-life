@@ -67,17 +67,6 @@ html, body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    min-height: 5%;
-    max-height: 10%;
-    border-top: 3px solid whitesmoke;
-    background-color: white;
-    padding-bottom: 40px;
-}
-
-#sizeRange {
-    position: relative;
-    top: 5px;
-    left: 20px;
 }
 
 table {
@@ -85,7 +74,7 @@ table {
 }
 
 td{
-    border: 1px solid whitesmoke;
+    border: 1px solid #dcdcdc;
     transition: all 0.15s ease-out;
 }
 

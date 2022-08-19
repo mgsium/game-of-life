@@ -6,7 +6,7 @@ class Visualisation{
         this.visSpeed = visSpeed; // visSpeed is 20 by default
         this.houseChoice = houseChoice; // houseChoice is red by default
     }
-    async Simulate(){
+    Simulate = () => {
         this.isSimulating = true;
         // disable start button
         $("#start-vis-btn").attr("disabled", true);
