@@ -145,17 +145,20 @@ export class Visualisation {
         this.stopSimulation();
     }
 
-    exportJSON(){
+    exportJSON = () => {
+        console.log("Exporting...");
         var fileToSave = new Blob(
-            [JSON.stringify({ housePositions: this.houses})],{
+            [JSON.stringify({ housePositions: this.houses})],
+            {
                 type: "application/json",
                 name: "housePosition.json"
-            })
+            }
+        );
     
         saveAs(fileToSave, "housePosition.json")
     }
 
-    async importJSON(files){
+    importJSON = async (files) => {
         const file = files.item(0);
         if (file.type === "application/json"){
             let fileText = await file.text();
@@ -163,7 +166,7 @@ export class Visualisation {
             fileObj = JSON.parse(fileText);
             // console.log(fileObj.housePositions);
             fileObj.housePositions.forEach((house) =>
-                $(`#${house}`).TRIGGER('click')
+                $(`#${house}`).trigger('click')
             );
         } else {
             alert("\nYou chose an invalid file type.\nPlease upload a json file.")
