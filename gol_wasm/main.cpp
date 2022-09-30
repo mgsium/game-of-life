@@ -9,14 +9,6 @@
 
 using namespace emscripten;
 
-/*
-#ifdef __cplusplus
-#define EXTERN extern "C"
-#else
-#define EXTERN
-#endif
-*/
-
 // Check if a cell is active/
 bool Grid::isActive(int x, int y) { return this->grid[x][y]; }
 
@@ -205,10 +197,10 @@ GridValues Grid::fillGrid(std::vector<std::pair<int, int>> activeCells,
 }
 
 int main() {
-  Grid grid;
+  /*Grid grid;
   grid.showGrid();
   grid.doTurn();
-  grid.showGrid();
+  grid.showGrid();*/
 
   return 0;
 }
