@@ -1,9 +1,8 @@
 # GameOfLifeVisualisation
 
-A web app simulating a model of Conway's Game of Life built using React, my own [VisualisationJs][VisJS_link] library and the [dragscroll][dragscrolljs_link] library by asvd.
+A web app simulating a model of Conway's Game of Life.
 
-
-Visit https://gameoflife.mgsium.com
+Visit https://gameoflife.mgsium.com to play.
 
 ![Demo Image](https://user-images.githubusercontent.com/46031748/193268952-efaad4b3-13d7-4b95-9953-dddadeef189b.png)
 
