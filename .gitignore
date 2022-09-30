@@ -1,5 +1,10 @@
 node_modules/
 build/
 .vscode/
-gol_wasm/*.js
-gol_wasm/*.mem
+
+gol_wasm/*
+!gol_wasm/main.cpp
+!gol_wasm/main.h
+!gol_wasm/Makefile
+
+package-lock.json

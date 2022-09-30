@@ -26,4 +26,4 @@ Running `make` in `/gol_wasm` compiles the source C++ to a `grid.js` file.
 
 (Use the `emcc` compiler directly to compile to web assembly.)
 
-Running `make` at the project root does the above, copies `grid.js` to `/src` and builds the react project to `/build`.
+Running `make` at the project root does the above, moves the output wasm files to `./node_modules/grid-wasm/` and builds the react project to `/build`.
