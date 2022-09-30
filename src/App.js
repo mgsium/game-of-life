@@ -1,28 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
-import { Visualisation } from './Visualisation.js';
+import * as React from "react";
 
 import $ from "jquery";
-import * as React from "react";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+
+import Module from "./grid";
 import { ChevronUp } from "react-feather";
+import { saveAs, fileObj } from 'file-saver';
 
-// creates an instace of the Visualisation class
-
-
-// colour panel click handlers
+const CellColors = {
+    Blue: "blue",
+    Black: "slate",
+    Red: "red"
+};
 
 const GridRow = (props) => {
     let blocks = [];
-    for (let i = 0; i < 150; i++){
+
+    for (let i = 0; i < 80; i++){
+        const style = {
+            minWidth: props.gridSize,
+            height: props.gridSize
+        };
+
         blocks.push(
           <td 
-            id={`${props.id}-${i}`} 
-            style={{
-              minWidth: props.gridSize,
-              height: props.gridSize
-            }}
-            onClick={() => props.cellHandler(`${props.id}-${i}`)}
+            // id={`${props.id}-${i}`} 
+            key={i}
+            style={style}
+            className={
+                props.grid.isActive(props.id, i) 
+                && `bg-${props.cellColor}-600`
+            }
+            onClick={() => props.toggle(props.id, i)}
           ></td>
         )
     }
@@ -31,69 +40,155 @@ const GridRow = (props) => {
             {blocks}
         </tr>
     )
-}
+};
 
-export default class GameGrid extends React.Component {
+export default class Game extends React.Component {
+    
+    constructor(props) {
+        super(props);
 
-    constructor(props){
-        super(props)
+        /*Module.onRuntimeInitialized = async () => {
+            const grid = new Module.Grid();
+            grid.toggle(20, 9);
+            grid.toggle(20, 10);
+            grid.toggle(20, 11);
+            grid.showGrid();
+            grid.doTurn();
+            grid.showGrid();
+            console.log("Done!");
+            this.setState({ grid: grid });
+        };*/
+
         this.state = {
-            gridSize: 20,
             isSimulating: false,
-            game: new Visualisation()
+            cellColor: CellColors.Blue,
+            speed: 100
+        };
+    }
+
+    toggle = async (x, y) => {
+        // Tiles can only be toggled when the
+        // simulation is not running
+        if (this.state.isSimulating) return;
+
+        const grid = this.state.grid;
+        grid.toggle(x, y);
+        this.setState({ grid: grid });
+    }
+
+    start = () => {
+        this.setState({ 
+            interval: setInterval(
+                this.doTurn,
+                (100/this.state.speed) * 70
+            )
+        });
+    }
+
+    doTurn = () => {
+        const grid = this.state.grid;
+        grid.doTurn();
+        this.setState({ grid: grid });
+    }
+
+    stop = () => {
+        clearInterval(this.state.interval);
+    }
+
+    clearCells = () => {
+        const grid = this.state.grid;
+        grid.clearGrid();
+        this.setState({ grid: grid });
+    }
+
+    loadTemplate = (t) => {
+        const grid = this.state.grid;
+        grid.loadTemplate(t);
+        grid.showGrid();
+        this.setState({ grid: grid });
+    }
+
+    componentDidMount() {
+        Module().then(module => {
+            const grid = new module.GameGrid();
+            grid.toggle(20, 9);
+            this.setState({ 
+                grid: grid,
+                templates: module.GridTemplate
+            });
+        });
+    }
+
+    updateSpeed = (e) => {
+        this.setState({ speed: e.target.value });
+        this.stop();
+        this.start();
+    }
+
+    exportJSON = () => {
+        console.log("Exporting...");
+        const grid = this.state.grid;
+        console.log(grid.exportGrid().split(","));
+
+        var fileToSave = new Blob(
+            [JSON.stringify({ activeCells: grid.exportGrid().split(",")})],
+            {
+                type: "application/json",
+                name: "activeCells.json"
+            }
+        );
+    
+        saveAs(fileToSave, "activeCells.json")
+    }
+
+
+    importJSON = async (files) => {
+        console.log("Importing...");
+        if(this.state.isSimulating) this.stop();
+
+        const file = files.item(0);
+        console.log(file.type);
+        if (file.type === "application/json"){
+            let fileText = await file.text();
+            console.log(fileText);
+            fileObj = JSON.parse(fileText);
+            console.log(fileObj);
+
+            const grid = this.state.grid;
+            grid.clearGrid();
+            fileObj.activeCells.forEach((coords) => {
+                coords = coords.split("-");
+                grid.toggle(parseInt(coords[0]), parseInt(coords[1]));
+            });
+            this.setState({ grid: grid });
+        } else {
+            alert("\nYou chose an invalid file type.\nPlease upload a json file.")
         }
-
-        this.getSliderVal = this.getSliderVal.bind(this);
-        this.changeBlockSize = this.changeBlockSize.bind(this);
-    }
-
-    houseBlue = () => this.setHouseColor("blue");
-    houseRed = () => this.setHouseColor("red");
-    houseGreen = () => this.setHouseColor("green");
-
-    setHouseColor = (color) => { 
-      const Game = this.state.game;
-      Game.houseChoice = `house-${color}`; 
-      Game.clearHouseColours();
-      this.setState({ game: Game });
-    }
-
-    cellHandler = (id) => {
-      $(`#${id}`).toggleClass(this.state.game.houseChoice);
-      if (this.state.game.houses.includes(id)) this.state.game.removeHouse(id);
-      else this.state.game.addHouse(id);
-    }
-
-    async getSliderVal(){
-        const slider = document.getElementById("sizeRange");
-        const Game = this.state.game;
-        Game.visSpeed = parseInt(slider.value);
-        this.setState({ game: Game });
-    }
-
-    changeBlockSize(event){
-        let sizeStr = event.target.id.substring(0, 2);
-        this.setState({"gridSize": parseInt(sizeStr)})
     }
 
     render(){
+        if (!this.state.templates || !this.state.grid) return;
+
         let grid = [];
-        for (let i = 80; i > 0; i--)
-            grid.push(<GridRow 
-              key={i} id={i} 
-              gridSize={this.state.gridSize}
-              cellHandler={this.cellHandler}
-            />);
+        for (let i = 0; i < 80; i++) grid.push(
+            <GridRow 
+                key={i} id={i} 
+                gridSize={20}
+                toggle={this.toggle}
+                grid={this.state.grid}
+                cellColor={this.state.cellColor}
+            />
+        );
 
         return (
-          <>
+            <>
                 <nav id="main-navbar-top" class="navbar border-b-1 border-gray-200 bg-white" style={{ borderBottomWidth: 1 }}>
                     <a class="navbar-brand font-medium text-gray-700" href="#">Conway's Game of Life</a>
                     <div style={{ float: "right" }} class="flex divide-x">
                         <div class="flex gap-2 mx-1.5">
                             <button 
                                 class="bg-indigo-500 hover:bg-indigo-600 text-slate-50 border-solid border-1 border-indigo-200 rounded px-3 py-1.5" 
-                                onClick={() => this.state.game.exportJSON()}
+                                onClick={this.exportJSON}
                             >Export</button>
                             <button
                                 class="bg-indigo-500 hover:bg-indigo-600 text-slate-50 border-solid border-1 border-indigo-200 rounded px-3 py-1.5" 
@@ -103,7 +198,7 @@ export default class GameGrid extends React.Component {
                                 id="file-upload-btn" 
                                 type="file" 
                                 style={{ display: "none" }} 
-                                onChange={ (event) => this.state.game.importJSON(event.target.files) }
+                                onChange={ (event) => this.importJSON(event.target.files) }
                             />
                         </div>
                         <div class="text-slate-500 flex items-center">
@@ -115,7 +210,15 @@ export default class GameGrid extends React.Component {
                         </div>
                     </div>
                 </nav>
-                <div className="dragscroll bg-gray-100">
+                <div 
+                    className="bg-gray-100" 
+                    style={{ 
+                        height: "calc(100vh - 114px)",
+                        overflow: "scroll",
+                        position: "relative",
+                        top: 57
+                    }}
+                >
                     <table>
                         <tbody>
                             {grid}
@@ -130,11 +233,14 @@ export default class GameGrid extends React.Component {
                     <div className="flex-1">
                         <span style={{"color": "grey"}}>Speed Control</span>
                         <input 
-                            type="range" min="10" max="300" 
-                            defaultValue="150" 
-                            id="sizeRange" onChange={this.getSliderVal}
+                            type="range" min="10" max="200" 
+                            defaultValue={this.state.speed} 
+                            id="sizeRange" onChange={this.updateSpeed}
                             className="bg-gray-900"
-                            style={{ "position": "relative", "top": "-4px", "left": "20px" }}
+                            style={{ 
+                                position: "relative", 
+                                top: 2, left: 20 
+                            }}
                         />
                     </div>
                     <div className="btn-group btn-group-toggle radio-btn flex-1" hidden>
@@ -158,8 +264,7 @@ export default class GameGrid extends React.Component {
                                 + " text-slate-50 border-solid border-1 border-indigo-200 rounded px-3 py-1.5" 
                             }
                             onClick={() => {
-                                if (!this.state.isSimulating) this.state.game.Simulate.bind(this.state.game)();
-                                else this.state.game.stopSimulation.bind(this.state.game)();
+                                !this.state.isSimulating ? this.start() : this.stop();
                                 this.setState({isSimulating: !this.state.isSimulating});
                             }}
                         >
@@ -167,7 +272,7 @@ export default class GameGrid extends React.Component {
                         </button>
                         <button 
                             class="bg-indigo-500 hover:bg-indigo-600 text-slate-50 border-solid border-1 border-indigo-200 rounded px-3 py-1.5" 
-                            onClick={this.state.game.clearHouses}
+                            onClick={this.clearCells}
                         >Clear</button>
                     </div>
                     <div className="dropup flex-1 justify-end flex gap-2">
@@ -181,25 +286,26 @@ export default class GameGrid extends React.Component {
                             </span>
                         </button>
                         <div className="dropdown-menu absolute" style={{ "position": "absolute", "left": "unset", right: "100px" }}>
-                            <a className="dropdown-item" id="glider-gun" href="#" onClick={this.state.game.loadTemplate}>Glider Gun</a>
-                            <a className="dropdown-item" id="bi-gun" href="#" onClick={this.state.game.loadTemplate}>Bi Gun</a>
-                            <a className="dropdown-item" id="ak-94" href="#" onClick={this.state.game.loadTemplate}>AK-94</a>
-                            <a className="dropdown-item" id="simkin-glider-gun" href="#" onClick={this.state.game.loadTemplate}>Simkin Glider Gun</a>
-                            <a className="dropdown-item" id="pipe-dreams" href="#" onClick={this.state.game.loadTemplate}>Piping</a>
+                            <a className="dropdown-item" id="glider-gun" href="#" onClick={() => this.loadTemplate(this.state.templates.GLIDER_GUN)}>Glider Gun</a>
+                            <a className="dropdown-item" id="bi-gun" href="#" onClick={() => this.loadTemplate(this.state.templates.BI_GUN)}>Bi Gun</a>
+                            <a className="dropdown-item" id="ak-94" href="#" onClick={() => this.loadTemplate(this.state.templates.AK94)}>AK-94</a>
+                            <a className="dropdown-item" id="simkin-glider-gun" href="#" onClick={() => this.loadTemplate(this.state.templates.SIMKIN_GLIDER_GUN)}>Simkin Glider Gun</a>
+                            <a className="dropdown-item" id="pipe-dreams" href="#" onClick={() => this.loadTemplate(this.state.templates.PIPE_DREAMS)}>Piping</a>
                         </div>
                         {
                             [
-                                [this.houseGreen, "Green", "green"],
-                                [this.houseBlue, "Blue", "blue"],
-                                [this.houseRed, "Red", "red"]
+                                [CellColors.Black, "Black", "slate"],
+                                [CellColors.Blue, "Blue", "blue"],
+                                [CellColors.Red, "Red", "red"]
                             ].map(([f, y, z]) => <button 
                                 className={`rounded !h-10 !w-10 bg-${z}-500 hover:bg-${z}-600`}
-                                onClick={f}
+                                onClick={() => this.setState({ cellColor: f })}
                             ></button>)
                         }
                     </div>
                 </nav>
-              </>
-        )
+            </>
+        );
     }
+
 }

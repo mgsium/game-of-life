@@ -1,6 +1,13 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
+#include <array>
+#include <cstdio>
+#include <emscripten/bind.h>
+#include <emscripten/val.h>
+#include <string>
+#include <utility>
+#include <vector>
 
 #define GRIDSIZE 80
 
@@ -17,12 +24,14 @@ public:
   void clearGrid();
   void doTurn();
   void showGrid();
-  void loadTemplate(int gt);
+  void loadTemplate(GridTemplate gt);
+  std::string exportGrid();
 
 private:
   GridValues grid = {};
   void doTurnCell(int x, int y, GridValues &newgrid);
-  GridValues fillGrid(std::vector<std::pair<int, int>> activeCells);
+  GridValues fillGrid(std::vector<std::pair<int, int>> activeCells,
+                      std::pair<int, int> offset);
 };
 
 #endif // MAIN_H_
