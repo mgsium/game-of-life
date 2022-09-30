@@ -3,7 +3,7 @@ import * as React from "react";
 
 import $ from "jquery";
 
-import Module from "./grid";
+import Module from "grid-wasm/grid";
 import { ChevronUp } from "react-feather";
 import { saveAs, fileObj } from 'file-saver';
 
