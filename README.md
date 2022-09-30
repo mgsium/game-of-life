@@ -3,9 +3,9 @@
 A web app simulating a model of Conway's Game of Life built using React, my own [VisualisationJs][VisJS_link] library and the [dragscroll][dragscrolljs_link] library by asvd.
 
 
-Visit https://gameoflifeneo.co.uk
+Visit https://gameoflife.mgsium.com
 
-![image](https://user-images.githubusercontent.com/46031748/104137499-215e6900-5395-11eb-8a6a-9641d31ce5ef.png)
+![Demo Image](https://user-images.githubusercontent.com/46031748/193268952-efaad4b3-13d7-4b95-9953-dddadeef189b.png)
 
 [dragscrolljs_link]: https://github.com/asvd/dragscroll
 [VisJS_link]: https://github.com/mgsium/VisualisationJs
